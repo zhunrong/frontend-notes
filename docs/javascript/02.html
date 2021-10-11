@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>闭包 | Frontend Notes</title>
+    <meta name="generator" content="VuePress 1.8.2">
+    
+    <meta name="description" content="前端知识点">
+    
+    <link rel="preload" href="/frontend-notes/assets/css/0.styles.2ab3db1f.css" as="style"><link rel="preload" href="/frontend-notes/assets/js/app.01039053.js" as="script"><link rel="preload" href="/frontend-notes/assets/js/2.c66189e9.js" as="script"><link rel="preload" href="/frontend-notes/assets/js/11.bf7ab885.js" as="script"><link rel="prefetch" href="/frontend-notes/assets/js/10.9805c28a.js"><link rel="prefetch" href="/frontend-notes/assets/js/12.d7ea43c1.js"><link rel="prefetch" href="/frontend-notes/assets/js/13.398fbf3f.js"><link rel="prefetch" href="/frontend-notes/assets/js/3.6385e1bc.js"><link rel="prefetch" href="/frontend-notes/assets/js/4.ab196059.js"><link rel="prefetch" href="/frontend-notes/assets/js/5.61dedc87.js"><link rel="prefetch" href="/frontend-notes/assets/js/6.7862f44a.js"><link rel="prefetch" href="/frontend-notes/assets/js/7.93859b05.js"><link rel="prefetch" href="/frontend-notes/assets/js/8.92749a82.js"><link rel="prefetch" href="/frontend-notes/assets/js/9.0fcd85d8.js">
+    <link rel="stylesheet" href="/frontend-notes/assets/css/0.styles.2ab3db1f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/frontend-notes/" class="home-link router-link-active"><!----> <span class="site-name">Frontend Notes</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/frontend-notes/" aria-current="page" class="sidebar-link">前言</a></li><li><section class="sidebar-group collapsable depth-0"><a href="/frontend-notes/javascript" class="sidebar-heading clickable router-link-active open"><span>JavaScript基础</span> <span class="arrow down"></span></a> <ul class="sidebar-links sidebar-group-items"><li><a href="/frontend-notes/javascript/03.html" class="sidebar-link">词法作用域</a></li><li><a href="/frontend-notes/javascript/01.html" class="sidebar-link">执行上下文</a></li><li><a href="/frontend-notes/javascript/02.html" aria-current="page" class="active sidebar-link">闭包</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/frontend-notes/javascript/02.html#闭包的形成" class="sidebar-link">闭包的形成</a></li><li class="sidebar-sub-header"><a href="/frontend-notes/javascript/02.html#闭包的作用" class="sidebar-link">闭包的作用</a></li><li class="sidebar-sub-header"><a href="/frontend-notes/javascript/02.html#注意事项" class="sidebar-link">注意事项</a></li></ul></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><a href="/frontend-notes/css" class="sidebar-heading clickable"><span>CSS基础</span> <span class="arrow right"></span></a> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="闭包"><a href="#闭包" class="header-anchor">#</a> 闭包</h1> <p>当一个内部函数中访问了外部作用域的变量时，就形成了一个闭包。</p> <h2 id="闭包的形成"><a href="#闭包的形成" class="header-anchor">#</a> 闭包的形成</h2> <p>回顾我们写过的代码，可能已经在不知不觉间隐含了许多闭包。</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token keyword">function</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">function</span> <span class="token function">bar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  
+  <span class="token function">bar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>上面代码中，内部函数bar中引用了外部函数foo的变量a，这就形成了一个闭包。</p> <p>但是这个闭包似乎没什么神奇的地方，也没什么特别的作用，让我们改造一下。</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token keyword">function</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">function</span> <span class="token function">bar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  
+  <span class="token keyword">return</span> bar<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> baz <span class="token operator">=</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">baz</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>函数foo调用后将内部函数bar返回并赋值给baz，由于闭包的存在，即使函数foo已经执行完毕，但是变量a不会回收，直到不再有对bar的引用为止。</p> <p>这样的闭包才真正发挥了它的价值。</p> <h2 id="闭包的作用"><a href="#闭包的作用" class="header-anchor">#</a> 闭包的作用</h2> <h4 id="_1-私有状态"><a href="#_1-私有状态" class="header-anchor">#</a> 1. 私有状态</h4> <p>利用闭包的特性，我们可以将一些程序状态隐藏起来，只允许用户通过特定方法来操作状态。</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token keyword">function</span> <span class="token function">createCounter</span><span class="token punctuation">(</span><span class="token parameter">count</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    <span class="token function">increment</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      count<span class="token operator">++</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> count<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token function">decrement</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      count<span class="token operator">--</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> count<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> counter <span class="token operator">=</span> <span class="token function">createCounter</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+counter<span class="token punctuation">.</span><span class="token function">increment</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+counter<span class="token punctuation">.</span><span class="token function">decrement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="注意事项"><a href="#注意事项" class="header-anchor">#</a> 注意事项</h2> <p>因为闭包会导致外部作用域的变量不能被立即回收，所以当闭包函数不再被需要时，需要及时清除对闭包函数的引用。</p></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/frontend-notes/javascript/01.html" class="prev">
+        执行上下文
+      </a></span> <span class="next"><a href="/frontend-notes/css/01.html">
+        position
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/frontend-notes/assets/js/app.01039053.js" defer></script><script src="/frontend-notes/assets/js/2.c66189e9.js" defer></script><script src="/frontend-notes/assets/js/11.bf7ab885.js" defer></script>
+  </body>
+</html>
