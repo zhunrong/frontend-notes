@@ -7,13 +7,19 @@ Function.prototype.myCall = function(target) {
   if (target == undefined) {
     target = window;
   }
+  // 缓存__fn__属性原始值
+  var origin = target.__fn__;
   target.__fn__ = this;
   var args = [];
   for (var i = 1; i < arguments.length; i++) {
     args.push("arguments[" + i + "]");
   }
   var result = eval("target.__fn__(" + args + ")");
-  delete target.__fn__;
+  if (origin !== undefined) {
+    target.__fn__ = origin;
+  } else {
+    delete target.__fn__;
+  }
   return result;
 };
 
@@ -44,6 +50,8 @@ Function.prototype.myApply = function(target, argsArray) {
   if (target == undefined) {
     target = window;
   }
+  // 缓存__fn__属性原始值
+  var origin = target.__fn__;
   target.__fn__ = this;
   var args = [];
   argsArray = argsArray || [];
@@ -51,7 +59,11 @@ Function.prototype.myApply = function(target, argsArray) {
     args.push("argsArray[" + i + "]");
   }
   var result = eval("target.__fn__(" + args + ")");
-  delete target.__fn__;
+  if (origin !== undefined) {
+    target.__fn__ = origin;
+  } else {
+    delete target.__fn__;
+  }
   return result;
 };
 
