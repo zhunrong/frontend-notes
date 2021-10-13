@@ -1,19 +1,20 @@
 # call/apply/bind
 
-#### 手写call
+### 手写call
 
 ```js
 Function.prototype.myCall = function(target) {
   if (target == undefined) {
     target = window;
   }
-  target.__fn__ = this;
+  var prop = "func_" + new Date().getTime();
+  target[prop] = this;
   var args = [];
   for (var i = 1; i < arguments.length; i++) {
     args.push("arguments[" + i + "]");
   }
-  var result = eval("target.__fn__(" + args + ")");
-  delete target.__fn__;
+  var result = eval("target." + prop + "(" + args + ")");
+  delete target[prop];
   return result;
 };
 
@@ -31,7 +32,43 @@ const sum = add.myCall(obj, 2, 3);
 console.log(sum); // 6
 ```
 
-#### 手写apply
+也可以不用eval，使用Function
+
+```js
+Function.prototype.myCall = function(target) {
+  if (target == undefined) {
+    target = window;
+  }
+  var prop = "func_" + new Date().getTime();
+  target[prop] = this;
+  var args = [];
+  for (var i = 1; i < arguments.length; i++) {
+    args.push("params[" + i + "]");
+  }
+  var result = new Function(
+    "target",
+    "params",
+    "return target." + prop + "(" + args + ");"
+  )(target, arguments);
+  delete target[prop];
+  return result;
+};
+
+/***** 以下为测试用例 *****/
+
+function add(x, y) {
+  return this.value + x + y;
+}
+
+const obj = {
+  value: 1,
+};
+
+const sum = add.myCall(obj, 2, 3);
+console.log(sum); // 6
+```
+
+### 手写apply
 
 ```js
 Function.prototype.myApply = function(target, argsArray) {
@@ -44,14 +81,15 @@ Function.prototype.myApply = function(target, argsArray) {
   if (target == undefined) {
     target = window;
   }
-  target.__fn__ = this;
+  var prop = "func_" + new Date().getTime();
+  target[prop] = this;
   var args = [];
   argsArray = argsArray || [];
   for (var i = 0; i < argsArray.length; i++) {
     args.push("argsArray[" + i + "]");
   }
-  var result = eval("target.__fn__(" + args + ")");
-  delete target.__fn__;
+  var result = eval("target." + prop + "(" + args + ")");
+  delete target[prop];
   return result;
 };
 
@@ -69,7 +107,7 @@ const sum = add.myApply(obj, [2, 3]);
 console.log(sum); // 6
 ```
 
-#### 手写bind
+### 手写bind
 
 ```js
 Function.prototype.myBind = function(target) {

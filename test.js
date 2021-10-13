@@ -1,17 +1,3 @@
-Function.prototype.myCall = function(target) {
-  if (target == undefined) {
-    target = window;
-  }
-  target.__fn__ = this;
-  var args = [];
-  for (var i = 1; i < arguments.length; i++) {
-    args.push("arguments[" + i + "]");
-  }
-  var result = eval("target.__fn__(" + args + ")");
-  delete target.__fn__;
-  return result;
-};
-
 Function.prototype.myApply = function(target, argsArray) {
   if (
     argsArray != undefined &&
@@ -22,31 +8,19 @@ Function.prototype.myApply = function(target, argsArray) {
   if (target == undefined) {
     target = window;
   }
-  target.__fn__ = this;
+  var prop = "func_" + new Date().getTime();
+  target[prop] = this;
   var args = [];
   argsArray = argsArray || [];
   for (var i = 0; i < argsArray.length; i++) {
     args.push("argsArray[" + i + "]");
   }
-  var result = eval("target.__fn__(" + args + ")");
-  delete target.__fn__;
+  var result = eval("target." + prop + "(" + args + ")");
+  delete target[prop];
   return result;
 };
 
-Function.prototype.myBind = function(target) {
-  var self = this;
-  var preset = [];
-  for (var i = 1; i < arguments.length; i++) {
-    preset.push(arguments[i]);
-  }
-  return function() {
-    var args = preset.concat();
-    for (var i = 0; i < arguments.length; i++) {
-      args.push(arguments[i]);
-    }
-    return self.myApply(target, args);
-  };
-};
+/***** 以下为测试用例 *****/
 
 function add(x, y) {
   return this.value + x + y;
@@ -56,6 +30,5 @@ const obj = {
   value: 1,
 };
 
-const addBind = add.myBind(obj);
-const sum = addBind(2, 3);
-console.log(sum);
+const sum = add.myApply(obj, [2, 3]);
+console.log(sum); // 6
