@@ -8,7 +8,8 @@ module.exports = [
       "/javascript/执行上下文",
       "/javascript/闭包",
       "/javascript/this",
-      "/javascript/call&apply&bind"
+      "/javascript/call&apply&bind",
+      "/javascript/prototype"
     ],
   },
   {
