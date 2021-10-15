@@ -9,7 +9,8 @@ module.exports = [
       "/javascript/闭包",
       "/javascript/this",
       "/javascript/call&apply&bind",
-      "/javascript/prototype"
+      "/javascript/prototype",
+      "/javascript/promise"
     ],
   },
   {
