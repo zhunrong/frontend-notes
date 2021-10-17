@@ -10,7 +10,8 @@ module.exports = [
       "/javascript/this",
       "/javascript/call&apply&bind",
       "/javascript/prototype",
-      "/javascript/promise"
+      "/javascript/promise",
+      "/javascript/深浅拷贝"
     ],
   },
   {
