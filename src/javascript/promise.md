@@ -52,7 +52,7 @@ promise.then(onFulfilled, onRejected);
 
 2.2.4. **onFulfilled** 或 **onRejected** 必须等到执行栈中同步代码执行之后才能调用。
 
-2.2.5. **onFulfilled** 与 **onRejected** 必须当作一个普通函数调用，内部不使用 this。
+2.2.5. **onFulfilled** 与 **onRejected** 必须当作一个普通函数调用，不影响 this 的默认指向。
 
 2.2.6. 同一个 **promise** 的 **then** 方法可以调用多次
 
@@ -102,3 +102,201 @@ promise2 = promise1.then(onFulfilled, onRejected);
 2.3.4. 如果 **x** 不是对象或函数，那么以 **x** 作为 **value** 履行 **promise**。
 
 如果一个 **promise** 通过一个参与循环 **thenable** 链的 **thenable** 来解析，这样 **\[\[Resolve\]\](promise, x)** 最终会再次调用 **\[\[Resolve\]\](promise, x)**，从而陷入无限递归。本规范鼓励但是不要求实现一个机制来检测这样的递归，并以 **TypeError** 作为 **reason** 拒绝这个 **promise**。
+
+## 实现
+
+```ts
+const STATE = Symbol("[STATE]");
+const CALLBACKS = Symbol("[CALLBACKS]");
+const RESULT = Symbol("[RESULT]");
+
+/**
+ * fulfill promise
+ */
+function fulfillPromise(promise: MyPromise, value: any) {
+  if (promise[STATE] !== "pending") return;
+  promise[STATE] = "fulfilled";
+  promise[RESULT] = value;
+  setTimeout(() => {
+    const callbacks = promise[CALLBACKS];
+    while (callbacks.length) {
+      const { onFulfilled, resolve, reject } = callbacks.shift()!;
+      if (typeof onFulfilled === "function") {
+        try {
+          const x = onFulfilled(promise[RESULT]);
+          resolve(x);
+        } catch (error) {
+          reject(error);
+        }
+      } else {
+        resolve(promise[RESULT]);
+      }
+    }
+  }, 0);
+}
+
+/**
+ * reject promise
+ */
+function rejectPromise(promise: MyPromise, reason: any) {
+  if (promise[STATE] !== "pending") return;
+  promise[STATE] = "rejected";
+  promise[RESULT] = reason;
+  setTimeout(() => {
+    const callbacks = promise[CALLBACKS];
+    while (callbacks.length) {
+      const { onRejected, resolve, reject } = callbacks.shift()!;
+      if (typeof onRejected === "function") {
+        try {
+          const x = onRejected(promise[RESULT]);
+          resolve(x);
+        } catch (error) {
+          reject(error);
+        }
+      } else {
+        reject(promise[RESULT]);
+      }
+    }
+  }, 0);
+}
+
+/**
+ * promise resolution procedure
+ */
+function resolvePromise(promise: MyPromise, x: any) {
+  if (promise === x) {
+    rejectPromise(promise, new TypeError());
+  } else if (x instanceof MyPromise) {
+    if (x[STATE] === "fulfilled") {
+      fulfillPromise(promise, x[RESULT]);
+    } else if (x[STATE] === "rejected") {
+      rejectPromise(promise, x[RESULT]);
+    } else {
+      x.then(
+        (value) => fulfillPromise(promise, value),
+        (reason) => rejectPromise(promise, reason)
+      );
+    }
+  } else if (x && /function|object/.test(typeof x)) {
+    let then;
+    try {
+      then = x.then;
+    } catch (error) {
+      return rejectPromise(promise, error);
+    }
+    if (typeof then === "function") {
+      let flag = false;
+      const resolve: Resolve = (value) => {
+        if (flag) return;
+        flag = true;
+        resolvePromise(promise, value);
+      };
+      const reject: Reject = (reason) => {
+        if (flag) return;
+        flag = true;
+        rejectPromise(promise, reason);
+      };
+      try {
+        then.call(x, resolve, reject);
+      } catch (error) {
+        if (!flag) {
+          rejectPromise(promise, error);
+        }
+      }
+    } else {
+      fulfillPromise(promise, x);
+    }
+  } else {
+    fulfillPromise(promise, x);
+  }
+}
+
+type Resolve = (value?: any) => void;
+type Reject = (reason?: any) => void;
+type Executor = (resolve: Resolve, reject: Reject) => void;
+type OnFulfilled = (value: any) => any;
+type OnRejected = (reason: any) => any;
+type Callback = {
+  onFulfilled?: OnFulfilled;
+  onRejected?: OnRejected;
+  resolve: Resolve;
+  reject: Reject;
+};
+
+export class MyPromise {
+  static reject(reason: any) {
+    return new MyPromise((resolve, reject) => {
+      reject(reason);
+    });
+  }
+
+  static resolve(value: any) {
+    return new MyPromise((resolve, reject) => {
+      resolve(value);
+    });
+  }
+
+  static all(promises: MyPromise[]) {
+    let count = promises.length;
+    const results: any[] = [];
+    return new MyPromise((resolve, reject) => {
+      if (count === 0) {
+        return resolve(results);
+      }
+      promises.forEach((promise, index) => {
+        promise.then(
+          (value) => {
+            results[index] = value;
+            if (--count === 0) {
+              resolve(results);
+            }
+          },
+          (reason) => reject(reason)
+        );
+      });
+    });
+  }
+
+  static race(promises: MyPromise[]) {
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((promise) => {
+        promise.then(
+          (value) => resolve(value),
+          (reason) => reject(reason)
+        );
+      });
+    });
+  }
+
+  [STATE]: "pending" | "fulfilled" | "rejected" = "pending";
+  [RESULT]: any = null;
+  [CALLBACKS]: Callback[] = [];
+
+  constructor(executor: Executor) {
+    const resolve: Resolve = (value) => resolvePromise(this, value);
+    const reject: Reject = (reason) => rejectPromise(this, reason);
+    try {
+      executor(resolve, reject);
+    } catch (error) {
+      reject(error);
+    }
+  }
+
+  then(onFulfilled?: OnFulfilled, onRejected?: OnRejected) {
+    return new MyPromise((resolve, reject) => {
+      this[CALLBACKS].push({
+        onFulfilled,
+        onRejected,
+        resolve,
+        reject,
+      });
+    });
+  }
+
+  catch(onRejected: OnRejected) {
+    return this.then(undefined, onRejected);
+  }
+}
+
+export default MyPromise;
+```
