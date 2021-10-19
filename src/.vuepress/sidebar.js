@@ -11,7 +11,8 @@ module.exports = [
       "/javascript/call&apply&bind",
       "/javascript/prototype",
       "/javascript/promise",
-      "/javascript/深浅拷贝"
+      "/javascript/深浅拷贝",
+      "/javascript/事件循环"
     ],
   },
   {
