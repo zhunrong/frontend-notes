@@ -6,6 +6,7 @@ module.exports = {
   title: "Frontend Notes",
   description: "前端知识点",
   dest: path.resolve(__dirname, "../../docs"),
+  port: 9494,
   themeConfig: {
     sidebar: sidebarConf,
   }
