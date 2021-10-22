@@ -1,0 +1,16 @@
+{
+  "name": "Frontend Notes",
+  "short_name": "Frontend Notes",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "前端开发笔记",
+  "icons": [
+    {
+      "src": "./logo.jpg",
+      "sizes": "640x640",
+      "type": "image/jpg"
+    }
+  ],
+  "related_applications": false
+}

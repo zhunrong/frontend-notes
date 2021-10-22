@@ -16,9 +16,9 @@ module.exports = [
       "/javascript/函数式编程"
     ],
   },
-  {
-    title: "CSS基础",
-    path: "/css",
-    children: [],
-  },
+  // {
+  //   title: "CSS基础",
+  //   path: "/css",
+  //   children: [],
+  // },
 ];
