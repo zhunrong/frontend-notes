@@ -12,7 +12,8 @@ module.exports = [
       "/javascript/prototype",
       "/javascript/promise",
       "/javascript/深浅拷贝",
-      "/javascript/事件循环"
+      "/javascript/事件循环",
+      "/javascript/函数式编程"
     ],
   },
   {
