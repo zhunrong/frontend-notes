@@ -16,9 +16,11 @@ module.exports = [
       "/javascript/函数式编程"
     ],
   },
-  // {
-  //   title: "CSS",
-  //   path: "/css",
-  //   children: [],
-  // },
+  {
+    title: "浏览器",
+    path: "/browser",
+    children: [
+      "/browser/ServiceWorker"
+    ],
+  },
 ];
