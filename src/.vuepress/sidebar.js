@@ -1,7 +1,7 @@
 module.exports = [
   "/",
   {
-    title: "JavaScript基础",
+    title: "JavaScript",
     path: "/javascript",
     children: [
       "/javascript/词法作用域",
@@ -17,7 +17,7 @@ module.exports = [
     ],
   },
   // {
-  //   title: "CSS基础",
+  //   title: "CSS",
   //   path: "/css",
   //   children: [],
   // },

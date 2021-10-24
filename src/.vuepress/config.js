@@ -9,6 +9,7 @@ module.exports = {
   port: 9494,
   themeConfig: {
     sidebar: sidebarConf,
+    lastUpdated: '更新时间',
   },
   head: [
     ["link", { rel: "icon", href: "/logo.jpg" }],
@@ -16,10 +17,21 @@ module.exports = {
     ["meta", { name: "theme-color", content: "#3eaf7c" }],
   ],
   plugins: [
-    "@vuepress/pwa",
-    {
-      serviceWorker: true,
-      updatePopup: true,
-    },
+    [
+      "@vuepress/pwa",
+      {
+        serviceWorker: true,
+        updatePopup: true,
+      }
+    ],
+    [
+      '@vuepress/last-updated',
+      {
+        transformer: (timestamp) => {
+          const moment = require('moment');
+          return moment(timestamp).format('YYYY/MM/DD HH:mm:ss');
+        }
+      }
+    ]
   ],
 };
