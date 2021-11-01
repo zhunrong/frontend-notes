@@ -97,3 +97,15 @@ function App() {
   );
 }
 ```
+
+6. **React.memo**
+
+> **React.memo** 是一个高阶组件，其返回的组件在 props 不变（对象的浅层对比）的情况下不会重新渲染，用于解决父组件重新渲染时导致子组件不必要的重新渲染的问题。
+
+```jsx
+function MyComponent(props) {
+  return <div>{props.name}</div>;
+}
+
+export default React.memo(MyComponent);
+```
