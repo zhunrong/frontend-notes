@@ -10,6 +10,7 @@ module.exports = {
   themeConfig: {
     sidebar: sidebarConf,
     lastUpdated: '更新时间',
+    sidebarDepth: 2
   },
   head: [
     ["link", { rel: "icon", href: "/logo.jpg" }],
