@@ -29,5 +29,12 @@ module.exports = [
     children: [
       "/frame/React 实战技巧"
     ]
+  },
+  {
+    title: '工程化',
+    path: "/project",
+    children: [
+      "/project/webpack"
+    ]
   }
 ];
