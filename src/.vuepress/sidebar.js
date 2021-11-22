@@ -34,7 +34,8 @@ module.exports = [
     title: '工程化',
     path: "/project",
     children: [
-      "/project/webpack"
+      "/project/webpack",
+      "/project/babel"
     ]
   }
 ];
