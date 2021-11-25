@@ -79,3 +79,107 @@ import "regenerator-runtime/runtime";
 > 但是这种方式会将所有 polyfill 都导入源码，直接影响转换后输出文件的体积，因此后面会提到更好的解决方式。
 
 ## @babel/preset-env
+
+重要参数：
+
+1. targets
+
+> 定义需要兼容的代码运行环境，比如浏览的型号、版本。也可以通过 **.browserslistrc** 指定。
+
+2. modules
+
+> "amd" | "umd" | "systemjs" | "commonjs" | "cjs" | "auto" | false， 默认 "auto"。
+>
+> 表示要转换成哪种模块语法，如果是 false ，表示保留 ESM 模块语法。如果要利用 webpack 的 Tree Shaking ，应该设置为 false 或 "auto"。最好设置为 "auto" ，这样 babel 可以自动判断。
+
+3. useBuiltIns
+
+> "usage" | "entry" | false, 默认 false。配置 @babel/preset-env 如何处理 polyfill 。
+>
+> false 。需要手动引入 polyfill 。
+>
+> "usage" 。根据源码中使用到的特性自动添加对应 polyfill 。
+>
+> "entry" 。需要手动在入口文件引入 polyfill ，但是 babel 最终会根据目标环境按需引入。
+
+4. corejs
+
+> 指定 core-js 的版本。
+
+## @babel/plugin-transform-runtime
+
+直接 polyfill 的话，会污染全局环境，比如 **includes** 方法被挂载到 **Array.prototype** 上。
+
+另外，一些帮助函数会被注入到各个需要的文件中，得不到复用，比如：
+
+源码：
+
+```js
+class Person {}
+```
+
+编译后：
+
+```js
+"use strict";
+
+// 这个帮助函数的代码直接被注入各个文件中，得不到复用
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+var Person = function Person() {
+  _classCallCheck(this, Person);
+};
+```
+
+使用该插件处理后：
+
+```js
+"use strict";
+
+// 通过导入的形式进行复用
+var _classCallCheck2 = require("@babel/runtime/helpers/classCallCheck");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var Person = function Person() {
+  (0, _classCallCheck3.default)(this, Person);
+};
+```
+
+安装：
+
+```shell
+npm install --save-dev @babel/plugin-transform-runtime
+```
+
+```shell
+npm install --save @babel/runtime-corejs3
+```
+
+配置：
+
+```js
+module.exports = {
+  plugins: [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        corejs: 3,
+      },
+    ],
+  ],
+};
+```
+
+## 参考
+
+1. [@babel/preset-env](https://www.babeljs.cn/docs/babel-preset-env)
+2. [@babel/plugin-transform-runtime](https://www.babeljs.cn/docs/babel-plugin-transform-runtime)
