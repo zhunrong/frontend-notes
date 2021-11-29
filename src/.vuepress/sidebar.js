@@ -17,6 +17,11 @@ module.exports = [
     ],
   },
   {
+    title: "TypeScript",
+    path: "/typescript",
+    children: ["/typescript/utility-types"],
+  },
+  {
     title: "浏览器",
     path: "/browser",
     children: ["/browser/ServiceWorker"],
