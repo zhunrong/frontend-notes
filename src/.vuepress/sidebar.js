@@ -13,29 +13,27 @@ module.exports = [
       "/javascript/promise",
       "/javascript/深浅拷贝",
       "/javascript/事件循环",
-      "/javascript/函数式编程"
+      "/javascript/函数式编程",
     ],
   },
   {
     title: "浏览器",
     path: "/browser",
-    children: [
-      "/browser/ServiceWorker"
-    ],
+    children: ["/browser/ServiceWorker"],
   },
   {
     title: "框架",
     path: "/frame",
-    children: [
-      "/frame/React 实战技巧"
-    ]
+    children: ["/frame/React 实战技巧"],
   },
   {
-    title: '工程化',
+    title: "工程化",
     path: "/project",
-    children: [
-      "/project/webpack",
-      "/project/babel"
-    ]
-  }
+    children: ["/project/webpack", "/project/babel"],
+  },
+  {
+    title: "网络",
+    path: "/network",
+    children: ["/network/http-cache"],
+  },
 ];
