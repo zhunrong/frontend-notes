@@ -273,7 +273,7 @@ type T2 = ConstructorParameters<Ctor2>; // [name: string, age: number]
 原理：
 
 ```ts
-type ConstructorParameters<Type extends { new (...args: any): any }> = Type extends { new (...args: infer P): any } ? P : never;
+type ConstructorParameters<Type extends new (...args: any) => any> = Type extends new (...args: infer P) => any ? P : never;
 ```
 
 ## 12. ReturnType\<Type>

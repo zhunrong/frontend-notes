@@ -19,7 +19,7 @@ module.exports = [
   {
     title: "TypeScript",
     path: "/typescript",
-    children: ["/typescript/utility-types"],
+    children: ["/typescript/advance", "/typescript/utility-types"],
   },
   {
     title: "浏览器",
