@@ -39,6 +39,6 @@ module.exports = [
   {
     title: "网络",
     path: "/network",
-    children: ["/network/http-cache"],
+    children: ["/network/basics", "/network/http", "/network/http-cache"],
   },
 ];
