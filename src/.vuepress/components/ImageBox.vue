@@ -28,10 +28,11 @@ export default {
 <style lang="less" scoped>
 .image-box {
   text-align: center;
-  .img {
-    padding: 30px;
-  }
+  padding: 1rem;
+  border: 1px dashed #ccc;
+  margin-bottom: 1rem;
   .title {
+    margin-top: 1rem;
     font-weight: bold;
   }
 }
