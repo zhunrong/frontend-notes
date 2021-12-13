@@ -2,7 +2,6 @@ module.exports = [
   "/",
   {
     title: "JavaScript",
-    path: "/javascript",
     children: [
       "/javascript/词法作用域",
       "/javascript/执行上下文",
@@ -18,27 +17,22 @@ module.exports = [
   },
   {
     title: "TypeScript",
-    path: "/typescript",
     children: ["/typescript/advance", "/typescript/utility-types"],
   },
   {
     title: "浏览器",
-    path: "/browser",
     children: ["/browser/ServiceWorker"],
   },
   {
     title: "框架",
-    path: "/frame",
     children: ["/frame/React 实战技巧"],
   },
   {
     title: "工程化",
-    path: "/project",
     children: ["/project/webpack", "/project/babel"],
   },
   {
     title: "网络",
-    path: "/network",
     children: ["/network/basics", "/network/http", "/network/http-cache"],
   },
 ];
