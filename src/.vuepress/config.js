@@ -33,6 +33,9 @@ module.exports = {
           return moment(timestamp).format('YYYY/MM/DD HH:mm:ss');
         }
       }
-    ]
+    ],
+    '@vuepress/back-to-top',
+    '@vuepress/medium-zoom',
+    'vuepress-plugin-table-of-contents'
   ],
 };
