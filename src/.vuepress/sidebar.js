@@ -35,4 +35,8 @@ module.exports = [
     title: "网络",
     children: ["/network/basics", "/network/http", "/network/http-cache"],
   },
+  {
+    title: "算法",
+    children: ["/algorithm/sorting"],
+  },
 ];
