@@ -17,7 +17,11 @@ module.exports = [
   },
   {
     title: "TypeScript",
-    children: ["/typescript/advance", "/typescript/utility-types"],
+    children: [
+      "/typescript/advance",
+      "/typescript/utility-types",
+      "/typescript/decorator",
+    ],
   },
   {
     title: "浏览器",
@@ -35,8 +39,8 @@ module.exports = [
     title: "网络",
     children: ["/network/basics", "/network/http", "/network/http-cache"],
   },
-  {
-    title: "算法",
-    children: ["/algorithm/sorting"],
-  },
+  // {
+  //   title: "算法",
+  //   children: ["/algorithm/sorting"],
+  // },
 ];
