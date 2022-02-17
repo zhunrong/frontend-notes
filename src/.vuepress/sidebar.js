@@ -39,6 +39,10 @@ module.exports = [
     title: "网络",
     children: ["/network/basics", "/network/http", "/network/http-cache"],
   },
+  {
+    title: '高级',
+    children: ["/advanced/nginx"]
+  }
   // {
   //   title: "算法",
   //   children: ["/algorithm/sorting"],
