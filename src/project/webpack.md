@@ -20,6 +20,33 @@
 
 > 插件为 webpack 提供了更多额外的能力。插件通过监听 webpack 运行期间不同生命周期事件，来执行各种操作。
 
+### 5. 模块（module）
+
+> 在 webpack 中，一个文件就是一个模块。
+
+webpack 原生支持的模块类型如下：
+
+1. ESM
+2. CommonJS
+3. AMD
+4. Assets —— 一般是图片、字体之类的资源型文件
+5. WebAssembly
+
+在各种 loader 的支持下，webpack 还可以支持更多需要预处理的模块类型。
+
+### 6. 块（chunk）
+
+> 在 webpack 中，一个 chunk 是由若干个模块组件成的。
+
+可以分为 2 种 chunk：
+
+1. initial chunk。初始 chunk 是指以入口文件为起点并包含所依赖的一系列模块的文件块。
+2. non-initial chunk。非初始 chunk 是可以延迟加载的文件块，可以通过动态导入创建，也可以通过 splitChunks 创建。
+
+### 7. 资源（asset）
+
+> asset 是指 webpack 打包输出的文件。
+
 ## 指南
 
 ### 代码分离
